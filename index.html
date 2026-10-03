@@ -19,13 +19,11 @@
         <a href="#products">Products</a>
         <a href="#categories">Categories</a>
         <a href="#track">Track Order</a>
-
-        <a href="#cart" class="cart-link">
-            <span class="cart-symbol">🛒</span>
-            <span>Cart</span>
-            <span id="cart-count">0</span>
-        </a>
+        <a href="#cart">Cart (<span id="cart-count">0</span>)</a>
+        <button onclick="logoutUser()">Logout</button>
     </nav>
+
+    <p id="user-name"></p>
 </header>
 
 
@@ -55,7 +53,6 @@
         type="text"
         id="searchInput"
         placeholder="Search for groceries..."
-        onkeyup="searchProducts()"
     >
 
 </section>
@@ -68,6 +65,11 @@
     <h2>🛍️ Shop by Category</h2>
 
     <div class="categories">
+
+        <div class="category" onclick="filterCategory('all')">
+            🛒
+            <h3>All</h3>
+        </div>
 
         <div class="category" onclick="filterCategory('fruit')">
             🍎
@@ -90,7 +92,7 @@
         </div>
 
         <div class="category" onclick="filterCategory('grocery')">
-            🛒
+            🛍️
             <h3>Grocery</h3>
         </div>
 
@@ -107,7 +109,8 @@
 
     <div class="products" id="product-list">
 
-        <!-- Apple -->
+
+        <!-- APPLE -->
 
         <div class="product" data-category="fruit">
 
@@ -127,7 +130,7 @@
         </div>
 
 
-        <!-- Milk -->
+        <!-- MILK -->
 
         <div class="product" data-category="dairy">
 
@@ -147,11 +150,11 @@
         </div>
 
 
-        <!-- Rice -->
+        <!-- RICE -->
 
         <div class="product" data-category="rice">
 
-            <img src="images/rice i4.jpg" alt="Rice">
+            <img src="images/rice i4.jpg" alt="Premium Rice">
 
             <h3>Premium Rice</h3>
 
@@ -167,11 +170,11 @@
         </div>
 
 
-        <!-- Brinjal -->
+        <!-- BRINJAL -->
 
         <div class="product" data-category="vegetable">
 
-            <img src="images/brinjal i6.jpg" alt="Brinjal">
+            <img src="images/brinjal i6.jpg" alt="Fresh Brinjal">
 
             <h3>Fresh Brinjal</h3>
 
@@ -187,11 +190,11 @@
         </div>
 
 
-        <!-- Potato -->
+        <!-- POTATO -->
 
         <div class="product" data-category="vegetable">
 
-            <img src="images/potato i5.jpg" alt="Potato">
+            <img src="images/potato i5.jpg" alt="Fresh Potato">
 
             <h3>Fresh Potato</h3>
 
@@ -207,11 +210,11 @@
         </div>
 
 
-        <!-- Tomato -->
+        <!-- TOMATO -->
 
         <div class="product" data-category="vegetable">
 
-            <img src="images/tomato i3.jpg" alt="Tomato">
+            <img src="images/tomato i3.jpg" alt="Fresh Tomato">
 
             <h3>Fresh Tomato</h3>
 
@@ -227,7 +230,7 @@
         </div>
 
 
-        <!-- Powder -->
+        <!-- POWDER -->
 
         <div class="product" data-category="grocery">
 
@@ -309,22 +312,21 @@
             id="delivery-date"
         >
 
-
         <label>Delivery Time</label>
 
         <select id="delivery-time">
 
             <option value="">Select Time</option>
 
-            <option>9 AM - 11 AM</option>
+            <option value="9 AM - 11 AM">9 AM - 11 AM</option>
 
-            <option>11 AM - 1 PM</option>
+            <option value="11 AM - 1 PM">11 AM - 1 PM</option>
 
-            <option>2 PM - 4 PM</option>
+            <option value="2 PM - 4 PM">2 PM - 4 PM</option>
 
-            <option>5 PM - 7 PM</option>
+            <option value="5 PM - 7 PM">5 PM - 7 PM</option>
 
-            <option>7 PM - 9 PM</option>
+            <option value="7 PM - 9 PM">7 PM - 9 PM</option>
 
         </select>
 
@@ -430,7 +432,7 @@
 </footer>
 
 
-<!-- JAVASCRIPT -->
+<!-- ================= JAVASCRIPT ================= -->
 
 <script src="script.js"></script>
 
