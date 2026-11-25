@@ -529,101 +529,55 @@ function closeCart() {
 
 function checkout() {
 
-
     // Check cart
     if (cart.length === 0) {
-
         alert("🛒 Your cart is empty!");
-
         return;
-
     }
-
 
     // Delivery date
-    let deliveryDate =
-        document.getElementById("delivery-date");
+    let deliveryDate = document.getElementById("delivery-date");
 
-
-    if (
-        deliveryDate &&
-        deliveryDate.value === ""
-    ) {
-
+    if (!deliveryDate || deliveryDate.value === "") {
         alert("📅 Please select delivery date.");
-
         return;
-
     }
-
 
     // Delivery time
-    let deliveryTime =
-        document.getElementById("delivery-time");
+    let deliveryTime = document.getElementById("delivery-time");
 
-
-    if (
-        deliveryTime &&
-        deliveryTime.value === ""
-    ) {
-
+    if (!deliveryTime || deliveryTime.value === "") {
         alert("⏰ Please select delivery time.");
-
         return;
-
     }
 
-
     // Create order ID
-    let orderId =
-        "FC" +
-        Math.floor(
-            100000 +
-            Math.random() * 900000
-        );
-
+    let orderId = "FC" + Math.floor(100000 + Math.random() * 900000);
 
     // Save order ID
-    localStorage.setItem(
-        "lastOrderId",
-        orderId
-    );
+    localStorage.setItem("lastOrderId", orderId);
 
+    // Save order placed time for tracking
+    localStorage.setItem("orderTime", Date.now());
 
-    // Save order date/time
-    localStorage.setItem(
-        "deliveryDate",
-        deliveryDate.value
-    );
+    // Save delivery date and time
+    localStorage.setItem("deliveryDate", deliveryDate.value);
+    localStorage.setItem("deliveryTime", deliveryTime.value);
 
-
-    localStorage.setItem(
-        "deliveryTime",
-        deliveryTime.value
-    );
-
-
+    // Order confirmation
     alert(
         "✅ Order placed successfully!\n\n" +
-        "Order ID: " +
-        orderId
+        "Order ID: " + orderId
     );
-
 
     // Clear cart
     cart = [];
-
     discount = 0;
-
     deliveryCharge = 0;
 
-
     displayCart();
-
     updateCartCount();
-
     calculateTotal();
-
 }
 
 
@@ -631,61 +585,59 @@ function checkout() {
 // TRACK ORDER
 // =====================================================
 
+let trackingInterval;
+
 function trackOrder() {
 
-    let input =
-        document.getElementById("order-id");
+    clearInterval(trackingInterval);
 
+    let input = document.getElementById("order-id");
+    let result = document.getElementById("tracking-message");
 
-    let result =
-        document.getElementById("tracking-message");
+    let enteredId = input.value.trim().toUpperCase();
+    let savedId = localStorage.getItem("lastOrderId");
+    let orderTime = Number(localStorage.getItem("orderTime"));
 
-
-    if (!input || !result) {
-        return;
-    }
-
-
-    let enteredId =
-        input.value.trim().toUpperCase();
-
-
-    let savedId =
-        localStorage.getItem("lastOrderId");
-
-
+    // Check empty Order ID
     if (enteredId === "") {
-
-        result.innerText =
-            "❌ Please enter your Order ID.";
-
+        result.innerText = "❌ Please enter Order ID";
         result.style.color = "red";
-
         return;
-
     }
 
+    // Validate Order ID
+    if (enteredId !== savedId || !orderTime) {
+        result.innerText = "❌ Order ID not found";
+        result.style.color = "red";
+        return;
+    }
 
-    if (
-        savedId &&
-        enteredId === savedId
-    ) {
+    // Automatically update delivery status
+    function updateStatus() {
 
-        result.innerText =
-            "✅ Your order is confirmed and being prepared.";
+        let seconds = (Date.now() - orderTime) / 1000;
+
+        if (seconds < 10) {
+            result.innerText = "✅ Order Confirmed";
+        }
+        else if (seconds < 15) {
+            result.innerText = "📦 Packing Products";
+        }
+        else if (seconds < 30) {
+            result.innerText = "🚚 Out for Delivery";
+        }
+        else {
+            result.innerText = "🏠 Delivered Successfully";
+            clearInterval(trackingInterval);
+        }
 
         result.style.color = "green";
-
-
-    } else {
-
-        result.innerText =
-            "❌ Order ID not found.";
-
-        result.style.color = "red";
-
     }
 
+    // Update every second
+    trackingInterval = setInterval(updateStatus, 1000);
+
+    updateStatus();
 }
 
 
